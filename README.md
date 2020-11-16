@@ -1,1 +1,1 @@
-'# birthday-bot' 
+# birthday-bot
