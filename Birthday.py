@@ -26,7 +26,7 @@ async def setbirthday(ctx, month, day):
         json.dump(birthdays, f)
     with open("birthdays.json", "r") as f:
         birthdays = dict(json.load(f))
-    if birthdays.has_key(userid):
+    if userid in birthdays:
         await ctx.channel.send("Your birthday has been successfully saved into the database.")
 
 @bot.event
