@@ -4,6 +4,11 @@ import json
 import os
 import keep_alive
 
+bashCommand = "pip install discord"
+import subprocess
+process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+output, error = process.communicate()
+
 bot = commands.Bot(command_prefix='b!')
 
 BOTTOKEN = os.environ["BOTTOKEN"]
