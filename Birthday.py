@@ -19,7 +19,7 @@ async def setbirthday(ctx, month, day):
     userid = str(user.id)
     with open("birthdays.json", "r") as f:
         birthdays = dict(json.load(f))
-    if birthdays.has_key(userid):
+    if userid in birthdays:
         del birthdays[userid]
     birthdays[userid] = "{}/{}".format(month, day)
     with open("birthdays.json", "w") as f:
