@@ -1,13 +1,13 @@
+bashCommand = "pip install discord"
+import subprocess
+process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+output, error = process.communicate()
+
 import discord
 from discord.ext import commands
 import json
 import os
 import keep_alive
-
-bashCommand = "pip install discord"
-import subprocess
-process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
-output, error = process.communicate()
 
 bot = commands.Bot(command_prefix='b!')
 
