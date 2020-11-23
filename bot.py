@@ -16,8 +16,8 @@ async def setbirthday(ctx, month, day):
     if birthdays.has_key(userid):
         del birthdays[userid]
     birthdays[userid] = "{}/{}".format(month, day)
-    with open("birthdays.json", "w"):
-        json.dump()
+    with open("birthdays.json", "w") as f:
+        json.dump(f)
 
 @bot.event
 async def on_message(message):
