@@ -23,5 +23,5 @@ async def setbirthday(ctx, month, day):
             
 
 
-bot.run('NzY3MTI1NjYzMzEyMTE3ODAy.X4tXcg.Qu-AgxRHGrbsNjfNY45v_uUKRw0')
+bot.run(BOTTOKEN)
 print("Logged in.")
