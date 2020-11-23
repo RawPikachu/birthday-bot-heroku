@@ -5,7 +5,7 @@ import os
 
 bot = commands.Bot(command_prefix='b!')
 
-BOTTOKEN = os.environ("BOTTOKEN")
+BOTTOKEN = os.environ["BOTTOKEN"]
 
 @bot.command()
 async def setbirthday(ctx, month, day):
