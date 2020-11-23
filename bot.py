@@ -19,9 +19,9 @@ async def setbirthday(ctx, month, day):
     with open("birthdays.json", "w"):
         json.dump()
 
-            
-            
-
+@bot.event
+async def on_message(message):
+    await bot.process_commands(message)                      
 
 bot.run(BOTTOKEN)
 print("Logged in.")
