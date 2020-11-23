@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import json
 import os
+import keep_alive
 
 bot = commands.Bot(command_prefix='b!')
 
@@ -22,6 +23,8 @@ async def setbirthday(ctx, month, day):
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)                      
+
+keep_alive.keep_alive()
 
 bot.run(BOTTOKEN)
 print("Logged in.")
