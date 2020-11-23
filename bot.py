@@ -4,6 +4,9 @@ import json
 
 bot = commands.Bot(command_prefix='b!')
 
+with open("BOTTOKEN.txt") as f:
+    BOTTOKEN = f.read()
+
 @bot.command()
 async def setbirthday(ctx, month, day):
     user = ctx.author
