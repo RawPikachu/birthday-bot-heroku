@@ -1,11 +1,11 @@
 import discord
 from discord.ext import commands
 import json
+import os
 
 bot = commands.Bot(command_prefix='b!')
 
-with open("BOTTOKEN.txt") as f:
-    BOTTOKEN = f.read()
+BOTTOKEN = os.environ("BOTTOKEN")
 
 @bot.command()
 async def setbirthday(ctx, month, day):
