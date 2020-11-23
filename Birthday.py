@@ -24,6 +24,10 @@ async def setbirthday(ctx, month, day):
     birthdays[userid] = "{}/{}".format(month, day)
     with open("birthdays.json", "w") as f:
         json.dump(f)
+    with open("birthdays.json", "r") as f:
+        birthdays = dict(json.load(f))
+    if birthdays.has_key(userid):
+        await ctx.channel.send("Your birthday has been successfully saved into the database.")
 
 @bot.event
 async def on_message(message):
