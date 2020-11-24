@@ -17,6 +17,8 @@ BOTTOKEN = os.environ["BOTTOKEN"]
 async def setbirthday(ctx, month, day):
     user = ctx.author
     userid = str(user.id)
+    if not(isinstance(month, int) and isinstance(day, int)):
+        await ctx.channel.send("Please enter month and day without brackets and enter it in its number form.")
     with open("birthdays.json", "r") as f:
         birthdays = dict(json.load(f))
     if userid in birthdays:
