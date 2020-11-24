@@ -1,17 +1,17 @@
-bashCommand = "pip install discord"
 import subprocess
+bashCommand = "pip install discord"
 process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
 output, error = process.communicate()
-
-import discord
-from discord.ext import commands
-import json
-import os
 import keep_alive
+import os
+import json
+from discord.ext import commands
+import discord
 
 bot = commands.Bot(command_prefix='b!')
 
 BOTTOKEN = os.environ["BOTTOKEN"]
+
 
 @bot.command()
 async def setbirthday(ctx, month, day):
@@ -34,9 +34,10 @@ async def setbirthday(ctx, month, day):
     if userid in birthdays:
         await ctx.channel.send("Your birthday has been successfully saved into the database.")
 
+
 @bot.event
 async def on_message(message):
-    await bot.process_commands(message)                      
+    await bot.process_commands(message)
 
 keep_alive.keep_alive()
 
