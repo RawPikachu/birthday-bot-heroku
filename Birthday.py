@@ -20,6 +20,15 @@ async def setbirthday(ctx, month, day):
     except:
         await ctx.channel.send("Please enter month and day without brackets and enter it in its number form.")
         return
+    if month > 12 or day > 31:
+        await ctx.channel.send("Please enter a valid date.")
+        return
+    if month % 2 == 0 and day > 30:
+        await ctx.channel.send("Please enter a valid date.")
+        return
+    if month == 2 and day > 29:
+        await ctx.channel.send("Please enter a valid date.")
+        return
     with open("birthdays.json", "r") as f:
         birthdays = dict(json.load(f))
     if userid in birthdays:
