@@ -2,20 +2,15 @@ import subprocess
 bashCommand = "pip install discord"
 process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
 output, error = process.communicate()
-bashCommand = "pip install multipledispatch"
-process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
-output, error = process.communicate()
 import keep_alive
 import os
 import json
 from discord.ext import commands
 import discord
-from multipledispatch import dispatch
 bot = commands.Bot(command_prefix='b!')
 
 BOTTOKEN = os.environ["BOTTOKEN"]
 
-@dispatch(commands.Context(), str, str)
 @bot.command()
 async def setbirthday(ctx, month, day):
     user = ctx.author
@@ -36,17 +31,6 @@ async def setbirthday(ctx, month, day):
         birthdays = dict(json.load(f))
     if userid in birthdays:
         await ctx.channel.send("Your birthday has been successfully saved into the database.")
-
-@dispatch(commands.Context())
-@bot.command()
-async def setbirthday(ctx):
-    await ctx.channel.send("Usage: b!setbirthday month day")
-
-@dispatch(commands.Context(), str)
-@bot.command()
-async def setbirthday(ctx, _):
-    await ctx.channel.send("Usage: b!setbirthday month day")
-
 
 @bot.event
 async def on_message(message):
