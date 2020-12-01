@@ -4,7 +4,6 @@ process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
 output, error = process.communicate()
 import keep_alive
 import os
-import json
 from discord.ext import tasks, commands
 import discord
 import datetime
