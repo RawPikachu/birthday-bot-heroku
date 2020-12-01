@@ -34,7 +34,7 @@ async def setbirthday(ctx, month, day):
         return
     birthdays = db["birthdays"]
     if any(userid in val for val in birthdays.values()):
-        keys = [key for key, value in birthdays.items() if 'hello' in value]
+        keys = [key for key, value in birthdays.items() if userid in value]
         key = keys[0]
         birthdays[key].remove(userid)
     if not(f"{month}/{day}" in birthdays):
