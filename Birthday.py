@@ -37,6 +37,8 @@ async def setbirthday(ctx, month, day):
         keys = [key for key, value in birthdays.items() if userid in value]
         key = keys[0]
         birthdays[key].remove(userid)
+        if birthdays[key] == []:
+            del birthdays[key]
     if not(f"{month}/{day}" in birthdays):
         birthdays[f"{month}/{day}"] = []
     birthdays[f"{month}/{day}"].append(userid)
