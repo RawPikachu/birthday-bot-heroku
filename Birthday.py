@@ -5,8 +5,11 @@ output, error = process.communicate()
 import keep_alive
 import os
 import json
-from discord.ext import commands
+from discord.ext import tasks, commands
 import discord
+import datetime
+from replit import db
+
 bot = commands.Bot(command_prefix='b!')
 
 BOTTOKEN = os.environ["BOTTOKEN"]
@@ -29,21 +32,25 @@ async def setbirthday(ctx, month, day):
     if month == 2 and day > 29:
         await ctx.channel.send("Please enter a valid date.")
         return
-    with open("birthdays.json", "r") as f:
-        birthdays = dict(json.load(f))
-    if userid in birthdays:
-        del birthdays[userid]
-    birthdays[userid] = "{}/{}".format(month, day)
-    with open("birthdays.json", "w") as f:
-        json.dump(birthdays, f)
-    with open("birthdays.json", "r") as f:
-        birthdays = dict(json.load(f))
-    if userid in birthdays:
+    birthdays = db["birthdays"]
+    if f"{month}/{day}" in birthdays:
+        birthdays[f"{month}/{day}"].remove(userid)
+    birthdays[f"{month}/{day}"].append(userid)
+    db["birthdays"] = birthdays
+    birthdays = db["birthdays"]
+    if userid in birthdays[f"{month}/{day}"]:
         await ctx.channel.send("Your birthday has been successfully saved into the database.")
 
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
+
+#@tasks.loop(minutes=1.0)
+#async def check_for_birthday():
+#    with open("birthdays.json", "r") as f:
+#        birthdays = dict(json.load(f))
+#        birthday_list = list(birthdays.keys())[list(birthdays.values()).index(f"{datetime.date.month}/{datetime.date.day}")]
+
 
 keep_alive.keep_alive()
 
