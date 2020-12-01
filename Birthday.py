@@ -33,8 +33,12 @@ async def setbirthday(ctx, month, day):
         await ctx.channel.send("Please enter a valid date.")
         return
     birthdays = db["birthdays"]
-    if f"{month}/{day}" in birthdays:
-        birthdays[f"{month}/{day}"].remove(userid)
+    if any('hello' in val for val in birthdays.values()):
+        keys = [key for key, value in birthdays.items() if 'hello' in value]
+        key = keys[0]
+        birthdays[key].remove(userid)
+    if not(f"{month}/{day}" in birthdays):
+        birthdays[f"{month}/{day}"] = []
     birthdays[f"{month}/{day}"].append(userid)
     db["birthdays"] = birthdays
     birthdays = db["birthdays"]
