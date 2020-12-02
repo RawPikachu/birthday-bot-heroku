@@ -1,8 +1,6 @@
 import subprocess
-bashCommand = "pip install discord"
+bashCommand = "pip install discord pytz"
 process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
-bashCommand2 = "pip install pytz"
-process2 = subprocess.Popen(bashCommand2.split(), stdout=subprocess.PIPE)
 import keep_alive
 import os
 from discord.ext import tasks, commands
