@@ -8,10 +8,13 @@ from discord.ext import tasks, commands
 import discord
 from datetime import datetime
 from replit import db
+from pytz import timezone
 
 bot = commands.Bot(command_prefix='b!')
 
 BOTTOKEN = os.environ["BOTTOKEN"]
+
+tz = timezone("US/Eastern")
 
 @bot.command()
 async def setbirthday(ctx, month, day):
@@ -52,7 +55,7 @@ async def on_message(message):
 
 @tasks.loop(minutes=1.0)
 async def check_for_birthday():
-    now = datetime.now()
+    now = datetime.now(tz)
     birthdays = db["birthdays"]
     if f"{now.month}/{now.day}" in birthdays:
         if now.hour == 8 and now.minute == 30:
