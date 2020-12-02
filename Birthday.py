@@ -6,7 +6,7 @@ import keep_alive
 import os
 from discord.ext import tasks, commands
 import discord
-import datetime
+from datetime import datetime
 from replit import db
 
 bot = commands.Bot(command_prefix='b!')
@@ -50,12 +50,20 @@ async def setbirthday(ctx, month, day):
 async def on_message(message):
     await bot.process_commands(message)
 
-#@tasks.loop(minutes=1.0)
-#async def check_for_birthday():
-#    with open("birthdays.json", "r") as f:
-#        birthdays = dict(json.load(f))
-#        birthday_list = list(birthdays.keys())[list(birthdays.values()).index(f"{datetime.date.month}/{datetime.date.day}")]
-
+@tasks.loop(minutes=1.0)
+async def check_for_birthday():
+    now = datetime.now()
+    birthdays = db["birthdays"]
+    if f"{now.month}/{now.day}" in birthdays:
+        if now.hour == 8 and now.minute == 30:
+            for guild in bot.guild():
+                if guild.get_member(birthdays) is not None:
+                    users_to_celebrate = birthdays[f"{now.month}/{now.day}"]
+                    if discord.utils.get(guild.text_channels, name="annoncements") == None:
+                        await guild.create_text_channel('annoncements')
+                    channel = discord.utils.get(guild.channels, name="annoncements")
+                    await channel.send("@everyone Hey guys! Today is a special day, it's the birthday of the following users! : {}".format(" ".join([f"<@{int(user)}>" for user in users_to_celebrate])))
+                
 
 keep_alive.keep_alive()
 
