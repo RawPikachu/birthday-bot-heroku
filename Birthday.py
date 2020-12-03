@@ -4,11 +4,12 @@ process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
 output, error = process.communicate()
 import keep_alive
 import os
-from discord.ext import tasks, commands
+from discord.ext import commands
 import discord
 from datetime import datetime
 from replit import db
 from pytz import timezone
+import asyncio
 
 bot = commands.Bot(command_prefix='b!')
 
@@ -53,7 +54,6 @@ async def setbirthday(ctx, month, day):
 async def on_message(message):
     await bot.process_commands(message)
 
-@tasks.loop(minutes=1.0)
 async def check_for_birthday():
     now = datetime.now(tz)
     birthdays = db["birthdays"]
@@ -71,11 +71,12 @@ async def check_for_birthday():
                     await guild.create_text_channel('annoncements')
                 channel = discord.utils.get(guild.channels, name="annoncements")
                 await channel.send("@everyone Hey guys! Today is a special day, it's the birthday of the following users! : {}".format(" ".join([f"<@{int(user)}>" for user in users_to_celebrate])))
+    await asyncio.sleep(60)
                 
 
 keep_alive.keep_alive()
 
-check_for_birthday()
+bot.loop.create_task(check_for_birthday())
 
 bot.run(BOTTOKEN)
 print("Logged in.")
