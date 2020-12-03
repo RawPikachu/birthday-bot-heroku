@@ -57,8 +57,11 @@ async def on_message(message):
 async def check_for_birthday():
     now = datetime.now(tz)
     birthdays = db["birthdays"]
+    print(1)
     if f"{now.month}/{now.day}" in birthdays:
+        print(2)
         if now.hour == 8 and now.minute == 30:
+            print(3)
             for guild in bot.guild():
                 users_to_celebrate = []
                 for user_to_celebrate in birthdays[f"{now.month}/{now.day}"]:
