@@ -75,5 +75,7 @@ async def check_for_birthday():
 
 keep_alive.keep_alive()
 
+check_for_birthday()
+
 bot.run(BOTTOKEN)
 print("Logged in.")
