@@ -72,11 +72,12 @@ async def check_for_birthday():
                         if guild.get_member(int(user_to_celebrate)) is not None:
                             print("user added")
                             users_to_celebrate.append(user_to_celebrate)
-                    if discord.utils.get(guild.text_channels, name="annoncements") == None:
+                    if discord.utils.get(guild.text_channels, name="annoncement") == None:
                         print("channel created")
                         await guild.create_text_channel('annoncements')
                     channel = discord.utils.get(guild.channels, name="annoncements")
-                    await channel.send("@everyone Hey guys! Today is a special day, it's the birthday of the following user(s)! : {}. Happy birthday!".format(" ".join([f"<@{int(user)}>" for user in users_to_celebrate])))
+                    print(users_to_celebrate)
+                    #await channel.send("@everyone Hey guys! Today is a special day, it's the birthday of the following user(s)! : {}. Happy birthday!".format(" ".join([f"<@{int(user)}>" for user in users_to_celebrate])))
         await asyncio.sleep(60)
                 
 
