@@ -55,23 +55,24 @@ async def on_message(message):
     await bot.process_commands(message)
 
 async def check_for_birthday():
-    now = datetime.now(tz)
-    birthdays = db["birthdays"]
-    print(1)
-    if f"{now.month}/{now.day}" in birthdays:
-        print(2)
-        if now.hour == 8 and now.minute == 30:
-            print(3)
-            for guild in bot.guilds():
-                users_to_celebrate = []
-                for user_to_celebrate in birthdays[f"{now.month}/{now.day}"]:
-                    if guild.get_member(int(user_to_celebrate)) is not None:
-                        users_to_celebrate.append(user_to_celebrate)
-                if discord.utils.get(guild.text_channels, name="annoncements") == None:
-                    await guild.create_text_channel('annoncements')
-                channel = discord.utils.get(guild.channels, name="annoncements")
-                await channel.send("@everyone Hey guys! Today is a special day, it's the birthday of the following users! : {}".format(" ".join([f"<@{int(user)}>" for user in users_to_celebrate])))
-    await asyncio.sleep(60)
+    while True:
+        now = datetime.now(tz)
+        birthdays = db["birthdays"]
+        print(1)
+        if f"{now.month}/{now.day}" in birthdays:
+            print(2)
+            if now.hour == 8 and now.minute == 30:
+                print(3)
+                for guild in bot.guilds():
+                    users_to_celebrate = []
+                    for user_to_celebrate in birthdays[f"{now.month}/{now.day}"]:
+                        if guild.get_member(int(user_to_celebrate)) is not None:
+                            users_to_celebrate.append(user_to_celebrate)
+                    if discord.utils.get(guild.text_channels, name="annoncements") == None:
+                        await guild.create_text_channel('annoncements')
+                    channel = discord.utils.get(guild.channels, name="annoncements")
+                    await channel.send("@everyone Hey guys! Today is a special day, it's the birthday of the following users! : {}".format(" ".join([f"<@{int(user)}>" for user in users_to_celebrate])))
+        await asyncio.sleep(60)
                 
 
 keep_alive.keep_alive()
