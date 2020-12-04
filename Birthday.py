@@ -13,7 +13,7 @@ import asyncio
 
 intents = discord.Intents.default()
 intents.members = True
-bot = commands.Bot(command_prefix='b!')
+bot = commands.Bot(command_prefix='b!', intents=intents)
 
 BOTTOKEN = os.environ["BOTTOKEN"]
 
