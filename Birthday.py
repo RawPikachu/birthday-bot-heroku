@@ -11,6 +11,8 @@ from replit import db
 from pytz import timezone
 import asyncio
 
+intents = discord.Intents.default()
+intents.members = True
 bot = commands.Bot(command_prefix='b!')
 
 BOTTOKEN = os.environ["BOTTOKEN"]
@@ -77,7 +79,7 @@ async def check_for_birthday():
                         await guild.create_text_channel('annoncement')
                     channel = discord.utils.get(guild.channels, name="annoncement")
                     print(users_to_celebrate)
-                    #await channel.send("@everyone Hey guys! Today is a special day, it's the birthday of the following user(s)! : {}. Happy birthday!".format(" ".join([f"<@{int(user)}>" for user in users_to_celebrate])))
+                    await channel.send("@everyone Hey guys! Today is a special day, it's the birthday of the following user(s)! : {}. Happy birthday!".format(" ".join([f"<@{int(user)}>" for user in users_to_celebrate])))
         await asyncio.sleep(60)
                 
 
