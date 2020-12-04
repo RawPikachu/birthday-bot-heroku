@@ -63,7 +63,7 @@ async def check_for_birthday():
             print(2)
             if now.hour == 8 and now.minute == 30:
                 print(3)
-                async for guild in bot.fetch_guilds(limit=None):
+                for guild in bot.fetch_guilds(limit=None).flatten():
                     print(4)
                     users_to_celebrate = []
                     for user_to_celebrate in birthdays[f"{now.month}/{now.day}"]:
