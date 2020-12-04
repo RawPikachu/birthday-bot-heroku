@@ -55,6 +55,7 @@ async def on_message(message):
     await bot.process_commands(message)
 
 async def check_for_birthday():
+    await bot.wait_until_ready()
     while True:
         now = datetime.now(tz)
         birthdays = db["birthdays"]
@@ -63,7 +64,7 @@ async def check_for_birthday():
             print(2)
             if now.hour == 8 and now.minute == 30:
                 print(3)
-                for guild in bot.fetch_guilds(limit=None).flatten():
+                for guild in bot.guilds:
                     print(4)
                     users_to_celebrate = []
                     for user_to_celebrate in birthdays[f"{now.month}/{now.day}"]:
@@ -75,7 +76,7 @@ async def check_for_birthday():
                         print("channel created")
                         await guild.create_text_channel('annoncements')
                     channel = discord.utils.get(guild.channels, name="annoncements")
-                    await channel.send("@everyone Hey guys! Today is a special day, it's the birthday of the following users! : {}".format(" ".join([f"<@{int(user)}>" for user in users_to_celebrate])))
+                    await channel.send("@everyone Hey guys! Today is a special day, it's the birthday of the following user(s)! : {}. Happy birthday!".format(" ".join([f"<@{int(user)}>" for user in users_to_celebrate])))
         await asyncio.sleep(60)
                 
 
