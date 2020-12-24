@@ -72,6 +72,12 @@ async def check_for_birthday():
                         await guild.create_text_channel('annoncement')
                     channel = discord.utils.get(guild.channels, name="annoncement")
                     await channel.send("@everyone Hey guys! Today is a special day, it's the birthday of the following user(s)! : {}. Happy birthday!".format(" ".join([f"<@{int(user)}>" for user in users_to_celebrate])))
+        if now.month == 12 and now.day == 24 and now.hour == 16 and now.minute == 10:
+            for guild in bot.guilds:
+                if discord.utils.get(guild.text_channels, name="annoncement") == None:
+                    await guild.create_text_channel('annoncement')
+                channel = discord.utils.get(guild.channels, name="annoncement")
+                await channel.send("(this is a test)")
         await asyncio.sleep(60)
                 
 
