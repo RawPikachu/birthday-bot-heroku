@@ -1,7 +1,3 @@
-import subprocess
-bashCommand = "pip install discord pytz"
-process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
-output, error = process.communicate()
 import keep_alive
 import os
 from discord.ext import commands
