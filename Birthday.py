@@ -24,7 +24,7 @@ async def setbirthday(ctx, month, day):
     except:
         await ctx.channel.send("Please enter month and day without brackets and enter it in its number form.")
         return
-    if month > 12 or day > 31:
+    if month > 12 or month < 1 or day > 31 or day < 1:
         await ctx.channel.send("Please enter a valid date.")
         return
     if month % 2 == 0 and day > 30:
