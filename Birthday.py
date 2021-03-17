@@ -82,6 +82,7 @@ class BirthdayBot(commands.Cog):
             await ctx.invoke(self._join)
         source = FFmpegPCMAudio(link)
         ctx.voice_client.play(source)
+        await ctx.send("Playing audio track.")
 
 
 
