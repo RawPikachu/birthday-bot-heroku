@@ -70,7 +70,7 @@ async def setbirthday(ctx, month, day):
         await ctx.channel.send("Your birthday has been successfully saved into the database.")
 
 @bot.command()
-@bot.command.has_role("DJ")
+@commands.has_role("DJ")
 async def join(ctx):
     destination = ctx.author.voice.channel
     if ctx.voice_state.voice:
@@ -79,7 +79,7 @@ async def join(ctx):
     ctx.voice_state.voice = await destination.connect()
 
 @bot.command()
-@bot.command.has_role("DJ")
+@commands.has_role("DJ")
 async def leave(ctx):
     if not ctx.voice_state.voice:
         return await ctx.send('Not connected to any voice channel.')
@@ -87,7 +87,7 @@ async def leave(ctx):
     await ctx.voice_state.stop()
 
 @bot.command()
-@bot.command.has_role("DJ")
+@commands.has_role("DJ")
 async def play(ctx, link):
     if not ctx.voice_state.voice:
         await ctx.invoke(join)
