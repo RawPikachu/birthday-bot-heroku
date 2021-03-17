@@ -61,8 +61,12 @@ class BirthdayBot(commands.Cog):
     async def _join(self, ctx):
         if ctx.author.voice:
             destination = ctx.author.voice.channel
-            await destination.connect()
-            await ctx.send("Bot joined.")
+            if ctx.voice_client:
+                await ctx.voice_client.move_to(destination)
+                await ctx.send("Bot joined.")
+            else:
+                await destination.connect()
+                await ctx.send("Bot joined.")
         else:
             await ctx.send("You must be in a voice channel first.")
 
@@ -77,9 +81,10 @@ class BirthdayBot(commands.Cog):
 
     @commands.command(name="play")
     @commands.has_role("DJ")
-    async def _play(self, ctx, link):
-        if not ctx.voice_client:
-            await ctx.invoke(self._join)
+    async def _play(self, ctx, link=None):
+        if link == None:
+            await ctx.send('You must provide a link providing an audio or video track.')
+        await ctx.invoke(self._join)
         source = FFmpegPCMAudio(link)
         ctx.voice_client.play(source)
         await ctx.send("Playing audio track.")
@@ -102,7 +107,7 @@ async def check_for_birthday():
         birthdays = db["birthdays"]
         if f"{now.month}/{now.day}" in birthdays:
             if now.hour == 8 and now.minute == 30:
-                for guild in self.bot.guilds:
+                for guild in bot.guilds:
                     users_to_celebrate = []
                     for user_to_celebrate in birthdays[f"{now.month}/{now.day}"]:
                         if guild.get_member(int(user_to_celebrate)) is not None:
@@ -112,7 +117,7 @@ async def check_for_birthday():
                     channel = discord.utils.get(guild.channels, name="annoncement")
                     await channel.send("@everyone Hey guys! Today is a special day, it's the birthday of the following user(s)! : {}. Happy birthday!".format(" ".join([f"<@{int(user)}>" for user in users_to_celebrate])))
         if now.month == 12 and now.day == 25 and now.hour == 8 and now.minute == 30:
-            for guild in self.bot.guilds:
+            for guild in bot.guilds:
                 if discord.utils.get(guild.text_channels, name="annoncement") == None:
                     await guild.create_text_channel('annoncement')
                 channel = discord.utils.get(guild.channels, name="annoncement")
