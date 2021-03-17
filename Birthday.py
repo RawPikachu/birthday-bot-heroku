@@ -1,3 +1,4 @@
+from discord.player import FFmpegPCMAudio
 import keep_alive
 import os
 from discord.ext import commands
@@ -10,10 +11,30 @@ import asyncio
 intents = discord.Intents.default()
 intents.members = True
 bot = commands.Bot(command_prefix='b!', intents=intents)
+voice_states = []
 
 BOTTOKEN = os.environ["BOTTOKEN"]
 
 tz = timezone("US/Eastern")
+
+def get_voice_state(ctx):
+    state = voice_states.get(ctx.guild.id)
+    if not state:
+        state = discord.VoiceState
+        voice_states[ctx.guild.id] = state
+    return state
+
+def cog_unload(self):
+    for state in self.voice_states.values():
+        self.bot.loop.create_task(state.stop())
+
+def cog_check(self, ctx: commands.Context):
+    if not ctx.guild:
+        raise commands.NoPrivateMessage('This command can\'t be used in DM channels.')
+    return True
+
+async def cog_before_invoke(ctx):
+    voice_state = get_voice_state()
 
 @bot.command()
 async def setbirthday(ctx, month, day):
@@ -48,9 +69,44 @@ async def setbirthday(ctx, month, day):
     if userid in birthdays[f"{month}/{day}"]:
         await ctx.channel.send("Your birthday has been successfully saved into the database.")
 
+@bot.command()
+@bot.commands.has_role("DJ")
+async def join(ctx):
+    destination = ctx.author.voice.channel
+    if ctx.voice_state.voice:
+        await ctx.voice_state.voice.move_to(destination)
+        return
+    ctx.voice_state.voice = await destination.connect()
+
+@bot.command()
+@bot.commands.has_role("DJ")
+async def leave(ctx):
+    if not ctx.voice_state.voice:
+        return await ctx.send('Not connected to any voice channel.')
+    
+    await ctx.voice_state.stop()
+
+@bot.command()
+@bot.commands.has_role("DJ")
+async def play(ctx, link):
+    if not ctx.voice_state.voice:
+        await ctx.invoke(join)
+    source = FFmpegPCMAudio(link)
+    ctx.voice_client.play(source)
+
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
+
+@join.before_invoke
+@play.before_invoke
+async def ensure_voice_state(ctx):
+    if not ctx.author.voice or not ctx.author.voice.channel:
+        raise commands.CommandError('You are not connected to any voice channel.')
+
+    if ctx.voice_client:
+        if ctx.voice_client.channel != ctx.author.voice.channel:
+            raise commands.CommandError('Bot is already in a voice channel.')
 
 async def check_for_birthday():
     await bot.wait_until_ready()
