@@ -3,10 +3,11 @@ import discord
 from Help import MyHelpCommand
 
 
-class General(commands.Cog):
+class General(commands.Cog, commands.MinimalHelpCommand):
     def __init__(self, bot):
         self.bot = bot
         self.bot.help_command = MyHelpCommand()
+        self.bot.help_command.cog = self
 
     def cog_check(self, ctx):
         if not ctx.guild:
@@ -27,3 +28,5 @@ class General(commands.Cog):
         else:
             embed=discord.Embed(title="PING", description=f":ping_pong: Pong! The ping is **{round(self.bot.latency *1000)}** milliseconds!", color=0x990000)
         await ctx.send(embed=embed)
+    
+    
