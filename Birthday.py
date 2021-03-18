@@ -106,6 +106,7 @@ class BirthdayBot(commands.Cog):
 intents = discord.Intents.default()
 intents.members = True
 bot = commands.Bot(command_prefix='b!', intents=intents)
+bot.remove_command("help")
 bot.add_cog(BirthdayBot(bot))
 tz = timezone("US/Eastern")
 
@@ -140,6 +141,5 @@ BOTTOKEN = os.environ["BOTTOKEN"]
 
 keep_alive.keep_alive()
 
-bot.remove_command("help")
 bot.loop.create_task(check_for_birthday())
 bot.run(BOTTOKEN)
