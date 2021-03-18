@@ -47,7 +47,7 @@ class Music(commands.Cog):
             await ctx.invoke(self._join)
             source = FFmpegPCMAudio(url)
             ctx.voice_client.play(source)
-            ctx.voice_client.source = PCMVolumeTransformer(ctx.voice_client.source, db["volume"][ctx.guild.id])
+            ctx.voice_client.source = PCMVolumeTransformer(ctx.voice_client.source, db["volume"][str(ctx.guild.id)])
             await ctx.send("Playing audio track.")
 
     @commands.command(name="setservervolume", aliases=['setvolume', 'servervolume', 'volume'], brief="Sets the volume for the server.", description="This commands allows you to set the volume of audios being played in the server.")
@@ -56,6 +56,7 @@ class Music(commands.Cog):
         volume = int(volume)
         if volume == None or volume < 0 or volume > 100:
             await ctx.send("You have to provide a volume between 0 and 100")
+            return
         db_volume = db["volume"]
         db_volume[ctx.guild.id] = volume/100
         db["volume"] = db_volume
