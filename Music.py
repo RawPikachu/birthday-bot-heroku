@@ -58,6 +58,7 @@ class Music(commands.Cog):
             await ctx.send("You have to provide a volume between 0 and 100")
             return
         db_volume = db["volume"]
+        del db_volume[ctx.guild.id]
         db_volume[ctx.guild.id] = volume/100
         db["volume"] = db_volume
         await ctx.send(f"Volume is set to {volume}%.")
