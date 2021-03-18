@@ -53,12 +53,12 @@ class Music(commands.Cog):
     @commands.command(name="setservervolume", aliases=['setvolume', 'servervolume', 'volume'], brief="Sets the volume for the server.", description="This commands allows you to set the volume of audios being played in the server.")
     @commands.has_permissions(administrator=True)
     async def _setservervolume(self, ctx, volume=None):
-        volume = int(volume)
+        volume = float(volume)
         if volume == None or volume < 0 or volume > 100:
             await ctx.send("You have to provide a volume between 0 and 100")
             return
         db_volume = db["volume"]
-        del db_volume[ctx.guild.id]
-        db_volume[ctx.guild.id] = volume/100
+        del db_volume[str(ctx.guild.id)]
+        db_volume[str(ctx.guild.id)] = volume/100
         db["volume"] = db_volume
         await ctx.send(f"Volume is set to {volume}%.")
