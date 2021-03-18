@@ -22,7 +22,7 @@ class BirthdayBot(commands.Cog):
     async def cog_command_error(self, ctx, error):
         await ctx.send("An error occurred: {}".format(str(error)))
 
-    @commands.command(name='setbirthday')
+    @commands.command(name='setbirthday', brief="Sets your birthday.")
     async def _setbirthday(self, ctx, month, day):
         user = ctx.author
         userid = str(user.id)
@@ -55,7 +55,7 @@ class BirthdayBot(commands.Cog):
         if userid in birthdays[f"{month}/{day}"]:
             await ctx.channel.send("Your birthday has been successfully saved into the database.")
 
-    @commands.command(name='join', invoke_without_subcommand=True)
+    @commands.command(name='join', invoke_without_subcommand=True, brief="The bot joins your voice channel.")
     @commands.has_role("DJ")
     async def _join(self, ctx):
         if ctx.author.voice:
@@ -69,7 +69,7 @@ class BirthdayBot(commands.Cog):
         else:
             await ctx.send("You must be in a voice channel first.")
 
-    @commands.command(name='leave', aliases=['disconnect', "stop"])
+    @commands.command(name='leave', aliases=['disconnect', "stop"], brief="The bot leaves your voice channel.")
     @commands.has_role("DJ")
     async def _leave(self, ctx):
         if ctx.voice_client:
@@ -78,18 +78,18 @@ class BirthdayBot(commands.Cog):
         else:
             await ctx.send('Not connected to any voice channel.')
 
-    @commands.command(name="play")
+    @commands.command(name="play", brief="The bot joins your voice channel if you are not already in one and plays the audio/video from the provided url.")
     @commands.has_role("DJ")
-    async def _play(self, ctx, link=None):
-        if link == None:
+    async def _play(self, ctx, url=None):
+        if url == None:
             await ctx.send('You must provide a link providing an audio or video track.')
         else:
             await ctx.invoke(self._join)
-            source = FFmpegPCMAudio(link)
+            source = FFmpegPCMAudio(url)
             ctx.voice_client.play(source)
             await ctx.send("Playing audio track.")
 
-    @commands.command(name="help", aliases=["commands"])
+#    @commands.command(name="help", aliases=["commands"], brief="Displays this help message.")
     async def _help(self, ctx):
         embed=discord.Embed(title="Commands List", color=0xfbff00)
         embed.set_author(name="Birthday Bot", icon_url="https://cdn.discordapp.com/avatars/767125663312117802/c1109ff318c462a0229cf814e9c85139.png?size=128")
@@ -97,7 +97,7 @@ class BirthdayBot(commands.Cog):
         embed.add_field(name="b!join", value="The bot joins your voice channel.", inline=True)
         embed.add_field(name="b!leave/b!disconnect/b!stop", value="The bot leaves your voice channel.", inline=True)
         embed.add_field(name="b!play audiourl/videourl", value="The bot joins your voice channel if you are not already in one and plays the audio/video from the provided url.", inline=True)
-        embed.add_field(name="b!help/b!commands", value="DIsplays this help message", inline=True)
+        embed.add_field(name="b!help/b!commands", value="Displays this help message", inline=True)
         embed.set_footer(text="https://birthdaybotstat.rawserver.tk/")
         await ctx.send(embed=embed)
 
@@ -106,7 +106,6 @@ class BirthdayBot(commands.Cog):
 intents = discord.Intents.default()
 intents.members = True
 bot = commands.Bot(command_prefix='b!', intents=intents)
-bot.remove_command("help")
 bot.add_cog(BirthdayBot(bot))
 tz = timezone("US/Eastern")
 
