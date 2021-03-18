@@ -84,10 +84,11 @@ class BirthdayBot(commands.Cog):
     async def _play(self, ctx, link=None):
         if link == None:
             await ctx.send('You must provide a link providing an audio or video track.')
-        await ctx.invoke(self._join)
-        source = FFmpegPCMAudio(link)
-        ctx.voice_client.play(source)
-        await ctx.send("Playing audio track.")
+        else:
+            await ctx.invoke(self._join)
+            source = FFmpegPCMAudio(link)
+            ctx.voice_client.play(source)
+            await ctx.send("Playing audio track.")
 
 
 
