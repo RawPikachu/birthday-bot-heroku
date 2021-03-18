@@ -14,7 +14,7 @@ class Birthday(commands.Cog):
     async def cog_command_error(self, ctx, error):
         await ctx.send("An error occurred: {}".format(str(error)))
 
-    @commands.command(name='setbirthday', description="Sets your birthday.")
+    @commands.command(name='setbirthday', brief="Sets your birthday.", description="You can use this command to set your birthday.")
     async def _setbirthday(self, ctx, month=None, day=None):
         if month == None or day == None:
             await ctx.send("You need to enter your birthday in this format: b!setbirthday month day")
