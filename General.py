@@ -14,7 +14,7 @@ class General(commands.Cog):
     async def cog_command_error(self, ctx, error):
         await ctx.send("An error occurred: {}".format(str(error)))
     
-    @commands.command(name="ping")
+    @commands.command(name="ping", description="Displays the bot's ping.")
     async def _ping(self, ctx):
         if round(self.bot.latency * 1000) <= 50:
             embed=discord.Embed(title="PING", description=f":ping_pong: Pingpingpingpingping! The ping is **{round(self.bot.latency *1000)}** milliseconds!", color=0x44ff44)
