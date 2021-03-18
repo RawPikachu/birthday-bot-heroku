@@ -15,11 +15,10 @@ from replit import db
 
 intents = discord.Intents.default()
 intents.members = True
-bot = commands.Bot(command_prefix='b!', intents=intents)
+bot = commands.Bot(command_prefix='b!', intents=intents, help_command=None)
 bot.add_cog(Music(bot))
 bot.add_cog(Birthday(bot))
 bot.add_cog(General(bot))
-bot.help_command = MyHelpCommand()
 tz = timezone("US/Eastern")
 
 @bot.event
