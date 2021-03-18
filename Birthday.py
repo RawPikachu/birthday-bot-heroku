@@ -14,7 +14,7 @@ import asyncio
 class MyHelpCommand(commands.MinimalHelpCommand):
     async def send_pages(self):
         destination = self.get_destination()
-        e = discord.Embed(title="Commands List", color=discord.Color.yellow(), description='')
+        e = discord.Embed(title="Commands List", color=discord.Color.gold(), description='')
         e.set_author(name="Birthday Bot", icon_url="https://cdn.discordapp.com/avatars/767125663312117802/c1109ff318c462a0229cf814e9c85139.png?size=128")
         e.set_footer(text="https://birthdaybotstat.rawserver.tk/")
         for page in self.paginator.pages:
