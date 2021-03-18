@@ -3,6 +3,7 @@ from discord.ext import commands
 from Music import Music
 from Birthday import Birthday
 from Help import MyHelpCommand
+from General import General
 from pytz import timezone
 from datetime import datetime
 import asyncio
@@ -17,6 +18,7 @@ intents.members = True
 bot = commands.Bot(command_prefix='b!', intents=intents)
 bot.add_cog(Music(bot))
 bot.add_cog(Birthday(bot))
+bot.add_cog(General(bot))
 bot.help_command = MyHelpCommand()
 tz = timezone("US/Eastern")
 
