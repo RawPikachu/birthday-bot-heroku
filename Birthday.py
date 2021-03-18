@@ -140,5 +140,6 @@ BOTTOKEN = os.environ["BOTTOKEN"]
 
 keep_alive.keep_alive()
 
+bot.remove_command("help")
 bot.loop.create_task(check_for_birthday())
 bot.run(BOTTOKEN)
