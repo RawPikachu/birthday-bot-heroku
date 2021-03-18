@@ -69,7 +69,7 @@ class BirthdayBot(commands.Cog):
         else:
             await ctx.send("You must be in a voice channel first.")
 
-    @commands.command(name='leave', aliases=['disconnect'])
+    @commands.command(name='leave', aliases=['disconnect', "stop"])
     @commands.has_role("DJ")
     async def _leave(self, ctx):
         if ctx.voice_client:
@@ -88,6 +88,18 @@ class BirthdayBot(commands.Cog):
             source = FFmpegPCMAudio(link)
             ctx.voice_client.play(source)
             await ctx.send("Playing audio track.")
+
+    @commands.command(name="help", aliases=["commands"])
+    async def _help(self, ctx):
+        embed=discord.Embed(title="Commands List", color=0xfbff00)
+        embed.set_author(name="Birthday Bot", icon_url="https://cdn.discordapp.com/avatars/767125663312117802/c1109ff318c462a0229cf814e9c85139.png?size=128")
+        embed.add_field(name="b!setbirthday month day", value="Sets your birthday.", inline=True)
+        embed.add_field(name="b!join", value="The bot joins your voice channel.", inline=True)
+        embed.add_field(name="b!leave/b!disconnect/b!stop", value="The bot leaves your voice channel.", inline=True)
+        embed.add_field(name="b!play audiourl/videourl", value="The bot joins your voice channel if you are not already in one and plays the audio/video from the provided url.", inline=True)
+        embed.add_field(name="b!help/b!commands", value="DIsplays this help message", inline=True)
+        embed.set_footer(text="https://birthdaybotstat.rawserver.tk/")
+        await ctx.send(embed=embed)
 
 
 
