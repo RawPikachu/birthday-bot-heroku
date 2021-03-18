@@ -35,7 +35,7 @@ class Music(commands.Cog):
     async def cog_command_error(self, ctx, error):
         await ctx.send("An error occurred: {}".format(str(error)))
 
-    @commands.command(name='join', invoke_without_subcommand=True, brief="The bot joins your voice channel.")
+    @commands.command(name='join', invoke_without_subcommand=True, description="The bot joins your voice channel.")
     @commands.has_role("DJ")
     async def _join(self, ctx):
         if ctx.author.voice:
@@ -49,7 +49,7 @@ class Music(commands.Cog):
         else:
             await ctx.send("You must be in a voice channel first.")
 
-    @commands.command(name='leave', aliases=['disconnect', "stop"], brief="The bot leaves your voice channel.")
+    @commands.command(name='leave', aliases=['disconnect', "stop"], description="The bot leaves your voice channel.")
     @commands.has_role("DJ")
     async def _leave(self, ctx):
         if ctx.voice_client:
@@ -58,7 +58,7 @@ class Music(commands.Cog):
         else:
             await ctx.send('Not connected to any voice channel.')
 
-    @commands.command(name="play", brief="The bot joins your voice channel if you are not already in one and plays the audio/video from the provided url.")
+    @commands.command(name="play", description="The bot joins your voice channel if you are not already in one and plays the audio/video from the provided url.")
     @commands.has_role("DJ")
     async def _play(self, ctx, url=None):
         if url == None:
@@ -83,8 +83,11 @@ class Birthday(commands.Cog):
     async def cog_command_error(self, ctx, error):
         await ctx.send("An error occurred: {}".format(str(error)))
 
-    @commands.command(name='setbirthday', brief="Sets your birthday.")
-    async def _setbirthday(self, ctx, month, day):
+    @commands.command(name='setbirthday', description="Sets your birthday.")
+    async def _setbirthday(self, ctx, month=None, day=None):
+        if month == None or day == None:
+            await ctx.send("You need to enter your birthday in this format: b!setbirthday month day")
+            return
         user = ctx.author
         userid = str(user.id)
         try:
