@@ -33,10 +33,14 @@ class General(commands.Cog, commands.MinimalHelpCommand):
     @commands.command(name='eval', brief="Runs an actual command.", description="This command allows you to run an actual command in python.")
     @commands.is_owner()
     async def _eval(self, ctx, *, command):
-        res = eval(command)      
-        if inspect.isawaitable(res):
-            await ctx.send(await res)
-        else:
-            await ctx.send(res)
+        res2 = eval(command)
+        if inspect.isawaitable(res2):
+            embed = discord.Embed(
+            title='Eval', description='' , colour=discord.Colour.green())
+
+            embed.add_field(name='Input', value=f'||{await res2}||', inline=False)
+
+
+            await ctx.send(embed=embed)
     
     
