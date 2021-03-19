@@ -45,7 +45,7 @@ class Music(commands.Cog):
             await ctx.send('You must provide a link providing an audio or video track.')
         else:
             db_volume = db["volume"]
-            if not db_volume.has_key(str(ctx.guild.id)):
+            if not str(ctx.guild.id) in db_volume:
                 db_volume[str(ctx.guild.id)] = 1
                 db["volume"] = db_volume
             await ctx.invoke(self._join)
@@ -62,7 +62,7 @@ class Music(commands.Cog):
             await ctx.send("You have to provide a volume between 0 and 100")
             return
         db_volume = db["volume"]
-        if db_volume.has_key(str(ctx.guild.id)):       
+        if not str(ctx.guild.id) in db_volume:       
             del db_volume[str(ctx.guild.id)]
         db_volume[str(ctx.guild.id)] = volume/100
         db["volume"] = db_volume
