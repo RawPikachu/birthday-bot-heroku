@@ -32,11 +32,8 @@ class General(commands.Cog, commands.MinimalHelpCommand):
     
     @commands.command(name='eval', brief="Runs an actual command.", description="This command allows you to run an actual command in python.")
     @commands.is_owner()
-    async def _eval(ctx, command):
-        res = eval(command)
-        if inspect.isawaitable(res):
-            await ctx.send(await res)
-        else:
-            await ctx.send(res)
+    async def _eval(ctx, *, command):
+        res = eval(command)      
+        await ctx.send(res)
     
     
