@@ -33,7 +33,17 @@ class General(commands.Cog, commands.MinimalHelpCommand):
     @commands.command(name='eval', brief="Runs an actual command.", description="This command allows you to run an actual command in python.")
     @commands.is_owner()
     async def _eval(self, ctx, *, command):
-        res2 = eval(command)
+        env = {
+            'bot': self.bot,
+            'ctx': ctx,
+            'message': ctx,
+            'guild': ctx.guild,
+            'channel': ctx.channel,
+            'author': ctx.author
+        }
+        env.update(globals())
+        
+        res2 = eval(command, env)
         if inspect.isawaitable(res2):
             embed = discord.Embed(
             title='Eval', description='' , colour=discord.Colour.green())
