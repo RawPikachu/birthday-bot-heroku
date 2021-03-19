@@ -34,6 +34,9 @@ class General(commands.Cog, commands.MinimalHelpCommand):
     @commands.is_owner()
     async def _eval(self, ctx, *, command):
         res = eval(command)      
-        await ctx.send(f'''{res}''')
+        if inspect.isawaitable(res):
+            await ctx.send(await res)
+        else:
+            await ctx.send(res)
     
     
