@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 from Music import Music
 from Birthday import Birthday
-from Help import MyHelpCommand
 from General import General
 from pytz import timezone
 from datetime import datetime

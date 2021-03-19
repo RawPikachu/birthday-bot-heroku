@@ -1,6 +1,7 @@
 from discord.ext import commands
 import discord
 from Help import MyHelpCommand
+import inspect
 
 
 class General(commands.Cog, commands.MinimalHelpCommand):
@@ -28,5 +29,14 @@ class General(commands.Cog, commands.MinimalHelpCommand):
         else:
             embed=discord.Embed(title="PING", description=f":ping_pong: Pong! The ping is **{round(self.bot.latency *1000)}** milliseconds!", color=0x990000)
         await ctx.send(embed=embed)
+    
+    @commands.command(name='eval', brief="Runs an actual command.", description="This command allows you to run an actual command in python.")
+    @commands.is_owner()
+    async def _eval(ctx, *, command):
+        res = eval(command)
+        if inspect.isawaitable(res):
+            await ctx.send(await res)
+        else:
+            await ctx.send(res)
     
     
