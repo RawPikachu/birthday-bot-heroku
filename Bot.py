@@ -35,7 +35,7 @@ async def check_for_birthday():
                     for user_to_celebrate in birthdays[f"{now.month}/{now.day}"]:
                         if guild.get_member(int(user_to_celebrate)) is not None:
                             users_to_celebrate.append(user_to_celebrate)
-                    if not users_to_celebrate:
+                    if users_to_celebrate:
                         if discord.utils.get(guild.text_channels, name="birthdays") == None:
                             await guild.create_text_channel('birthdays')
                         channel = discord.utils.get(guild.channels, name="birthdays")
