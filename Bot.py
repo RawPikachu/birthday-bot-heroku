@@ -3,6 +3,7 @@ from discord.ext import commands
 from Music import Music
 from Birthday import Birthday
 from General import General
+from ErrorHandler import CommandErrorHandler
 from pytz import timezone
 from datetime import datetime
 import asyncio
@@ -18,6 +19,9 @@ bot = commands.Bot(command_prefix='b!', intents=intents, help_command=None)
 bot.add_cog(Music(bot))
 bot.add_cog(Birthday(bot))
 bot.add_cog(General(bot))
+bot.add_cog(CommandErrorHandler(bot))
+temp_disabled_command = bot.get_command("volume")
+temp_disabled_command.enabled = False
 tz = timezone("US/Eastern")
 
 @bot.event

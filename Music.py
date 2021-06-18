@@ -20,21 +20,34 @@ class Music(commands.Cog):
     async def _join(self, ctx):
         if ctx.author.voice:
             destination = ctx.author.voice.channel
-            if ctx.voice_client:
+            if ctx.voice_client and ctx.author.voice.channel == ctx.voice_client.channel:
+                await ctx.send("Bot is already connected.")
+            elif ctx.voice_client:
                 await ctx.voice_client.move_to(destination)
-                await ctx.send("Bot joined.")
+                if ctx.voice_client and ctx.author.voice.channel == ctx.voice_client.channel:
+                    await ctx.send("Bot moved to your channel.")
+                else:
+                    await ctx.send("Bot was unable to move to your channel.")
             else:
                 await destination.connect()
-                await ctx.send("Bot joined.")
+                if ctx.voice_client:
+                    await ctx.send("Bot joined.")
+                else:
+                    await ctx.send("Bot was unable to join your channel.")
         else:
             await ctx.send("You must be in a voice channel first.")
 
     @commands.command(name='leave', aliases=['disconnect', "stop"], brief="The bot leaves your voice channel.", description="This command makes the bot leave your voice channel.")
     @commands.check_any(commands.is_owner(), commands.has_role("DJ"))
     async def _leave(self, ctx):
+        if ctx.voice_client and not ctx.author.voice.channel == ctx.voice_client.channel:
+            await ctx.send("You have to be in the same channel as the bot to use this command.")
         if ctx.voice_client:
             await ctx.guild.voice_client.disconnect()
-            await ctx.send("Bot left.")
+            if not ctx.voice_client:
+                await ctx.send("Bot left.")
+            else:
+                await ctx.send("Bot was unable to leave the channel.")
         else:
             await ctx.send('Not connected to any voice channel.')
 
@@ -48,11 +61,15 @@ class Music(commands.Cog):
             if not str(ctx.guild.id) in db_volume:
                 db_volume[str(ctx.guild.id)] = 1
                 db["volume"] = db_volume
-            await ctx.invoke(self._join)
+            if (ctx.voice_client and not ctx.author.voice.channel == ctx.voice_client.channel) or (not ctx.voice_client):
+                await ctx.invoke(self._join)
             source = FFmpegPCMAudio(url)
             ctx.voice_client.play(source)
             ctx.voice_client.source = PCMVolumeTransformer(ctx.voice_client.source, db["volume"][str(ctx.guild.id)])
-            await ctx.send("Playing audio track.")
+            if ctx.voice_client:
+                await ctx.send("Playing audio track.")
+            else:
+                await ctx.send("Failed to play audio track.")
 
     @commands.command(name="setservervolume", aliases=['setvolume', 'servervolume', 'volume'], brief="Sets the volume for the server.", description="This commands allows you to set the volume of audios being played in the server.")
     @commands.check_any(commands.is_owner(), commands.has_permissions(administrator=True))
