@@ -11,9 +11,6 @@ class Music(commands.Cog):
         if not ctx.guild:
             raise commands.NoPrivateMessage('This command can\'t be used in DM channels.')
         return True
-    
-    async def cog_command_error(self, ctx, error):
-        await ctx.send("An error occurred: {}".format(str(error)))
 
     @commands.command(name='join', invoke_without_subcommand=True, brief="The bot joins your voice channel.", description="This command makes the bot join your voice channel.")
     @commands.check_any(commands.is_owner(), commands.has_role("DJ"))

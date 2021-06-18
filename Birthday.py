@@ -10,9 +10,6 @@ class Birthday(commands.Cog):
         if not ctx.guild:
             raise commands.NoPrivateMessage('This command can\'t be used in DM channels.')
         return True
-    
-    async def cog_command_error(self, ctx, error):
-        await ctx.send("An error occurred: {}".format(str(error)))
 
     @commands.command(name='setbirthday', brief="Sets your birthday.", description="You can use this command to set your birthday.")
     async def _setbirthday(self, ctx, month=None, day=None):

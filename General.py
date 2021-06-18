@@ -16,9 +16,6 @@ class General(commands.Cog, commands.MinimalHelpCommand):
             raise commands.NoPrivateMessage('This command can\'t be used in DM channels.')
         return True
     
-    async def cog_command_error(self, ctx, error):
-        await ctx.send("An error occurred: {}".format(str(error)))
-    
     @commands.command(name="ping", brief="Displays the bot's ping.", description="This command allows you to display the bot's ping.")
     async def _ping(self, ctx):
         if round(self.bot.latency * 1000) <= 50:
