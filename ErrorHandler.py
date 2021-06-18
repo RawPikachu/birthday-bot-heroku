@@ -30,7 +30,7 @@ class CommandErrorHandler(commands.Cog):
             await ctx.send('This command does not exist, try b!help.')
         
         elif isinstance(error, commands.DisabledCommand):
-            await ctx.send(f'{ctx.command} has been disabled.')
+            await ctx.send(f'{ctx.command} is currently disabled.')
 
         elif isinstance(error, commands.NoPrivateMessage):
             try:
