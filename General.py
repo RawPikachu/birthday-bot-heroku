@@ -2,6 +2,7 @@ from discord.ext import commands
 import discord
 from Help import MyHelpCommand
 import inspect
+from replit import db
 
 
 class General(commands.Cog, commands.MinimalHelpCommand):
@@ -39,7 +40,8 @@ class General(commands.Cog, commands.MinimalHelpCommand):
             'message': ctx,
             'guild': ctx.guild,
             'channel': ctx.channel,
-            'author': ctx.author
+            'author': ctx.author,
+            'db': db
         }
         env.update(globals())
         
