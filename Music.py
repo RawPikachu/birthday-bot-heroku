@@ -1,6 +1,7 @@
 from discord.ext import commands
 from discord import FFmpegPCMAudio, PCMVolumeTransformer
 from replit import db
+import asyncio
 
 
 class Music(commands.Cog):    
@@ -87,4 +88,8 @@ class Music(commands.Cog):
     async def _random(self, ctx):
         await ctx.invoke(self._play, url="https://cdn.discordapp.com/attachments/767132531350700062/855454319411068928/Never_Gonna_Give_You_Up_Original.mp3")
         if ctx.voice_client:
-            await ctx.send("haha jk.")
+            await ctx.send("Finding a random song.")
+            await asyncio.sleep(.25)
+            await ctx.send("IndexError: list song_list out of range, fetching from rickroll_list instead.")
+            await asyncio.sleep(.25)
+            await ctx.send("Playing the chosen song.")
