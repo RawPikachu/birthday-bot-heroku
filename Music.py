@@ -40,7 +40,7 @@ class Music(commands.Cog):
     async def _leave(self, ctx):
         if ctx.voice_client and not ctx.author.voice.channel == ctx.voice_client.channel:
             await ctx.send("You have to be in the same channel as the bot to use this command.")
-        if ctx.voice_client:
+        elif ctx.voice_client:
             await ctx.guild.voice_client.disconnect()
             if not ctx.voice_client:
                 await ctx.send("Bot left.")
