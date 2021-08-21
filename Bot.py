@@ -52,9 +52,19 @@ async def check_for_birthday():
                 await channel.send("Merry Christmas @everyone ! Go spend time with your family! :>")
         await asyncio.sleep(60)
 
+async def rate_limit_check():
+    import requests
+
+    r = requests.head(url="https://discord.com/api/v1")
+    try:
+        print(f"Rate limit {int(r.headers['Retry-After']) / 60} minutes left")
+    except:
+        print("No rate limit")
+
 BOTTOKEN = os.environ["BOTTOKEN"]
 
 keep_alive.keep_alive()
 
 bot.loop.create_task(check_for_birthday())
+bot.loop.create_task(rate_limit_check())
 bot.run(BOTTOKEN)
