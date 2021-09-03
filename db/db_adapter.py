@@ -34,7 +34,7 @@ def drop_tables():
 def create_birthday(user_id, day, month, year):
     conn = __create_connection()
     cursor = conn.cursor()
-    cursor.execute(queries.create_birthday, (user_id, day, month, year))
+    cursor.execute(queries.create_birthday, (user_id, day, month, year, month, day, year, user_id))
     conn.commit()
     cursor.close()
     conn.close()
