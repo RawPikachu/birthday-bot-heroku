@@ -2,7 +2,7 @@ create_birthday_table = '''create table birthday (id text primary key, day numer
 
 delete_birthday_table = '''drop table if exists birthday'''
 
-create_birthday = '''insert into birthday (id, day, month, year ) values (%s, %s, %s, %s) on conflict (id) do update set month = %s, day = %s, year = %s  where id = %s'''
+create_birthday = '''insert into birthday (id, day, month, year ) values (%s, %s, %s, %s) on conflict (birthday.id) do update set month = %s, day = %s, year = %s  where id = %s'''
 
 update_birthday = '''update birthday set month = %s, day = %s, year = %s  where id = %s'''
 
