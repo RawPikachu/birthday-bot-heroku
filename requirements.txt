@@ -1,1 +1,11 @@
+aiohttp
+async-timeout
+chardet
+discord
 discord.py
+discord.py[voice]
+multidict
+psycopg2
+websockets
+ffmpeg
+pynacl

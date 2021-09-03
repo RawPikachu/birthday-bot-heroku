@@ -1,6 +1,5 @@
 from discord.ext import commands
 from discord import FFmpegPCMAudio, PCMVolumeTransformer
-from replit import db
 import asyncio
 
 
@@ -55,15 +54,15 @@ class Music(commands.Cog):
         if url == None:
             await ctx.send('You must provide a link providing an audio or video track.')
         else:
-            db_volume = db["volume"]
-            if not str(ctx.guild.id) in db_volume:
-                db_volume[str(ctx.guild.id)] = 1
-                db["volume"] = db_volume
+            #db_volume = db["volume"]
+            #if not str(ctx.guild.id) in db_volume:
+            #    db_volume[str(ctx.guild.id)] = 1
+            #    db["volume"] = db_volume
             if (ctx.voice_client and not ctx.author.voice.channel == ctx.voice_client.channel) or (not ctx.voice_client):
                 await ctx.invoke(self._join)
             source = FFmpegPCMAudio(url)
             ctx.voice_client.play(source)
-            ctx.voice_client.source = PCMVolumeTransformer(ctx.voice_client.source, db["volume"][str(ctx.guild.id)])
+            ctx.voice_client.source = PCMVolumeTransformer(ctx.voice_client.source, 50)
             if ctx.voice_client:
                 await ctx.send("Playing audio track.")
             else:
@@ -76,11 +75,11 @@ class Music(commands.Cog):
         if volume == None or volume < 0 or volume > 100:
             await ctx.send("You have to provide a volume between 0 and 100")
             return
-        db_volume = db["volume"]
-        if str(ctx.guild.id) in db_volume:       
-            del db_volume[str(ctx.guild.id)]
-        db_volume[str(ctx.guild.id)] = volume/100
-        db["volume"] = db_volume
+        #db_volume = db["volume"]
+        #if str(ctx.guild.id) in db_volume:       
+        #    del db_volume[str(ctx.guild.id)]
+        #db_volume[str(ctx.guild.id)] = volume/100
+        #db["volume"] = db_volume
         await ctx.send(f"Volume is set to {volume}%.")
 
     @commands.command(name="random", brief="*cough* Plays a random song.", description="*ahem* This commands allows you to play a random song in your voice channel.")

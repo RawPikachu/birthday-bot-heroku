@@ -2,7 +2,7 @@ from discord.ext import commands
 import discord
 from Help import MyHelpCommand
 import inspect
-from replit import db
+import db.db_adapter as db
 
 
 class General(commands.Cog, commands.MinimalHelpCommand):
