@@ -127,7 +127,7 @@ class Wynncraft(commands.Cog):
                     db_server.calculate_uptime()
                     for server in serverlist:
                         if server.name == db_server.name:
-                            db_server.name = server.name
+                            db_server.total_players = server.total_players
                     db.update_server_list(db_server.name, db_server.total_players, db_server.timestamp, uptime=db_server.uptime)
 
                 await asyncio.sleep(30)
