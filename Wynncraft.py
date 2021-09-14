@@ -98,32 +98,33 @@ class Wynncraft(commands.Cog):
     
     async def server_check(self):
         async with Corkus() as corkus:
-            onlineplayers = await corkus.network.online_players()
-            serverlist = onlineplayers.servers
-            
-            db_server_list = db.get_server_list_all()
-
-            servernamelist = [server.name for server in serverlist]
-
-            db_server_name_list = [db_server.name for db_server in db_server_list]
-
-            for db_server_name in db_server_name_list:
-                if not (db_server_name in servernamelist):
-                    db.delete_server_list(db_server_name)
-            
-            for servername in servernamelist:
-                if not (servername in db_server_name_list):
-                    for server in serverlist:
-                        if server.name == servername:                           
-                            db.create_server_list(servername, server.total_players, int(time.time()))
-            
-            db_server_list = db.get_server_list_all()
-            
-            for db_server in db_server_list:
-                db_server.calculate_uptime()
-                await db_server.update_total_players()
-                db.update_server_list(db_server.name, db_server.total_players, db_server.timestamp, uptime=db_server.uptime)
+            while True:
+                onlineplayers = await corkus.network.online_players()
+                serverlist = onlineplayers.servers
                 
-            await asyncio.sleep(30)
+                db_server_list = db.get_server_list_all()
+
+                servernamelist = [server.name for server in serverlist]
+
+                db_server_name_list = [db_server.name for db_server in db_server_list]
+
+                for db_server_name in db_server_name_list:
+                    if not (db_server_name in servernamelist):
+                        db.delete_server_list(db_server_name)
+                
+                for servername in servernamelist:
+                    if not (servername in db_server_name_list):
+                        for server in serverlist:
+                            if server.name == servername:                           
+                                db.create_server_list(servername, server.total_players, int(time.time()))
+                
+                db_server_list = db.get_server_list_all()
+                
+                for db_server in db_server_list:
+                    db_server.calculate_uptime()
+                    await db_server.update_total_players()
+                    db.update_server_list(db_server.name, db_server.total_players, db_server.timestamp, uptime=db_server.uptime)
+
+                await asyncio.sleep(30)
             
             
