@@ -16,11 +16,3 @@ class World:
 
     def calculate_uptime(self):
         self.uptime = str(int((int(time.time()) - self.timestamp)/60)) + " minutes"
-
-    async def update_total_players(self):
-        async with Corkus() as corkus:
-            onlineplayers = await corkus.network.online_players()
-            serverlist = onlineplayers.servers
-            for server in serverlist:
-                if server.name == self.name:
-                    self.total_players == server.total_players

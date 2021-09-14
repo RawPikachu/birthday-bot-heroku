@@ -119,10 +119,15 @@ class Wynncraft(commands.Cog):
                                 db.create_server_list(servername, server.total_players, int(time.time()))
                 
                 db_server_list = db.get_server_list_all()
+
+                onlineplayers = await corkus.network.online_players()
+                serverlist = onlineplayers.servers
                 
                 for db_server in db_server_list:
                     db_server.calculate_uptime()
-                    await db_server.update_total_players()
+                    for server in serverlist:
+                        if server.name == db_server.name:
+                            db_server.name = server.name
                     db.update_server_list(db_server.name, db_server.total_players, db_server.timestamp, uptime=db_server.uptime)
 
                 await asyncio.sleep(30)
