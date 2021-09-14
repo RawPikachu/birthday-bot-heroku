@@ -3,7 +3,6 @@ import traceback
 import sys
 from discord.ext import commands
 from urllib.error import HTTPError
-from ratelimit import RateLimitException
 
 
 class CommandErrorHandler(commands.Cog):
@@ -49,9 +48,6 @@ class CommandErrorHandler(commands.Cog):
         
         elif isinstance(error, HTTPError):
             await ctx.send('HTTPError' + error.code)
-
-        elif isinstance(error, RateLimitException):
-            await ctx.send("Exceeding rate limit, please wait until the rate limit ends.")
 
         else:
             print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
