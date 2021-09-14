@@ -2,6 +2,8 @@ import discord
 import traceback
 import sys
 from discord.ext import commands
+from urllib.error import HTTPError
+from ratelimit import RateLimitException
 
 
 class CommandErrorHandler(commands.Cog):
@@ -41,6 +43,15 @@ class CommandErrorHandler(commands.Cog):
         elif isinstance(error, commands.BadArgument):
             if ctx.command.qualified_name == 'tag list':
                 await ctx.send('I could not find that member. Please try again.')
+
+        elif isinstance(error, commands.CommandOnCooldown):
+            await ctx.send('This command is on cooldown.')
+        
+        elif isinstance(error, HTTPError):
+            await ctx.send('HTTPError' + error.code)
+
+        elif isinstance(error, RateLimitException):
+            await ctx.send("Exceeding rate limit, please wait until the rate limit ends.")
 
         else:
             print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
