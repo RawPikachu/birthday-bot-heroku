@@ -15,7 +15,7 @@ class World:
         self.min30_chest_count = self.chest_count - self.last_chest_count
 
     def calculate_uptime(self):
-        self.uptime = str(int(int(time.time()) - self.timestamp)/60) + " minutes"
+        self.uptime = str(int((int(time.time()) - self.timestamp)/60)) + " minutes"
 
     async def update_total_players(self):
         async with Corkus() as corkus:
