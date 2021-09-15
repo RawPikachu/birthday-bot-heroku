@@ -16,6 +16,7 @@ class Wynncraft(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.bot.loop.create_task(self.server_check())
+        self.bot.loop.create_task(self.chest_count_check())
     """
     @cog_ext.cog_slash(name="findlootingworld", 
                             description="Finds the least looted wynncraft world.",
@@ -140,7 +141,7 @@ class Wynncraft(commands.Cog):
             while True:
                 db_server_list = db.get_server_list_all()
 
-                db_server_list_5_plus = [db_server.name for db_server in db_server_list if db_server.uptime >= 300]
+                db_server_list_5_plus = [db_server.name for db_server in db_server_list if int(db_server.uptime) >= 300]
                 
                 onlineplayers = await corkus.network.online_players()
                 serverlist = onlineplayers.servers
@@ -180,7 +181,7 @@ class Wynncraft(commands.Cog):
                     db_server.last_chest_count = chest_count
                     db_server.chest_count = players_chests_found
 
-                    db.update_server_list(db_server.name, db_server.total_players, db_server.timestamp, min30_chest_count=db_server.min30_chest_count, chest_count=json.dumps(db_server.chest_count), last_chest_count=json.dumps(db_server.last_chest_count))
+                    db.update_server_list(db_server.name, db_server.total_players, db_server.timestamp, uptime=db_server.uptime, min30_chest_count=db_server.min30_chest_count, chest_count=json.dumps(db_server.chest_count), last_chest_count=json.dumps(db_server.last_chest_count))
 
                 await asyncio.sleep(1800)
 
