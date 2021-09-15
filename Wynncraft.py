@@ -173,7 +173,7 @@ class Wynncraft(commands.Cog):
 
                     c_db_server_chest_count = Counter(db_server.chest_count)
                     c_players_chests_found = Counter(players_chests_found)
-                    server_total_chests_found = int((c_players_chests_found - c_db_server_chest_count).values().sum())
+                    server_total_chests_found = int(list((c_players_chests_found - c_db_server_chest_count).values()).sum())
 
                     db_server.min30_chest_count = server_total_chests_found
                     db_server.last_chest_count = db_server.chest_count
