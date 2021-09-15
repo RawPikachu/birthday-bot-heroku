@@ -164,7 +164,7 @@ class Wynncraft(commands.Cog):
                     db_server.last_chest_count = db_server.chest_count
                     db_server.chest_count = server_total_chests_found
 
-                    db.update_server_list(db_server.name, db_server.total_players, db_server.timestamp, min30_chest_count=db_server.min30_chest_count, chest_count=db_server.chest_count, last_chest_count=db_server.last_chest_count)
+                    db.update_server_list(db_server.name, db_server.total_players, db_server.timestamp, uptime=db_server.uptime, min30_chest_count=db_server.min30_chest_count, chest_count=db_server.chest_count, last_chest_count=db_server.last_chest_count)
 
                 await asyncio.sleep(1800)
 
