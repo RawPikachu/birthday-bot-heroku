@@ -170,15 +170,13 @@ class Wynncraft(commands.Cog):
             
                     for key in keys_to_delete:
                         del players_chests_found[key]
-                    
-                    chest_count = json.loads(db_server.chest_count)
 
-                    c_db_server_chest_count = Counter(chest_count)
+                    c_db_server_chest_count = Counter(db_server.chest_count)
                     c_players_chests_found = Counter(players_chests_found)
                     server_total_chests_found = c_players_chests_found - c_db_server_chest_count
 
                     db_server.min30_chest_count = server_total_chests_found
-                    db_server.last_chest_count = chest_count
+                    db_server.last_chest_count = db_server.chest_count
                     db_server.chest_count = players_chests_found
 
                     db.update_server_list(db_server.name, db_server.total_players, db_server.timestamp, uptime=db_server.uptime, min30_chest_count=db_server.min30_chest_count, chest_count=json.dumps(db_server.chest_count), last_chest_count=json.dumps(db_server.last_chest_count))
