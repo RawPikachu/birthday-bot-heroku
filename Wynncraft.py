@@ -9,6 +9,7 @@ import time
 from db import db_adapter as db
 from corkus import Corkus
 from tabulate import tabulate
+import json
 
 
 class Wynncraft(commands.Cog):
@@ -155,15 +156,31 @@ class Wynncraft(commands.Cog):
                         player_chests_found = player.statistics.chests_found
                         players_chests_found[player.username] = player_chests_found
 
-                    server_total_chests_found = sum(players_chests_found.values())
                     db_server = [db_server for db_server in db_server_list if db_server.name == chosen_server.name][0]
                     if db_server.chest_count == None:
-                        db_server.chest_count = server_total_chests_found
-                    db_server.min30_chest_count = server_total_chests_found - db_server.chest_count
-                    db_server.last_chest_count = db_server.chest_count
-                    db_server.chest_count = server_total_chests_found
+                        db_server.chest_count = players_chests_found
 
-                    db.update_server_list(db_server.name, db_server.total_players, db_server.timestamp, min30_chest_count=db_server.min30_chest_count, chest_count=db_server.chest_count, last_chest_count=db_server.last_chest_count)
+                    keys_to_delete = [key for key in db_server.chest_count if not (key in players_chests_found)]
+            
+                    for key in keys_to_delete:
+                        del db_server.chest_count[key]
+            
+                    keys_to_delete = [key for key in players_chests_found if not (key in db_server.chest_count)]
+            
+                    for key in keys_to_delete:
+                        del players_chests_found[key]
+                    
+                    chest_count = json.loads(db_server.chest_count)
+
+                    c_db_server_chest_count = Counter(chest_count)
+                    c_players_chests_found = Counter(players_chests_found)
+                    server_total_chests_found = c_players_chests_found - c_db_server_chest_count
+
+                    db_server.min30_chest_count = server_total_chests_found
+                    db_server.last_chest_count = chest_count
+                    db_server.chest_count = players_chests_found
+
+                    db.update_server_list(db_server.name, db_server.total_players, db_server.timestamp, min30_chest_count=db_server.min30_chest_count, chest_count=json.dumps(db_server.chest_count), last_chest_count=json.dumps(db_server.last_chest_count))
 
                 await asyncio.sleep(1800)
 
