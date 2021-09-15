@@ -15,6 +15,7 @@ class Wynncraft(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.bot.loop.create_task(self.server_check())
+        self.bot.loop.create_task(self.chest_count_check())
     """
     @cog_ext.cog_slash(name="findlootingworld", 
                             description="Finds the least looted wynncraft world.",
