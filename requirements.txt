@@ -10,3 +10,4 @@ websockets
 ffmpeg
 pynacl
 corkus.py
+tabulate
