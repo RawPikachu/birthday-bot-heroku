@@ -139,7 +139,7 @@ class Wynncraft(commands.Cog):
             while True:
                 db_server_list = db.get_server_list_all()
 
-                db_server_list_5_plus = [db_server.name for db_server in db_server_list if db_server.uptime >= 300]
+                db_server_list_5_plus = [db_server.name for db_server in db_server_list if int(db_server.uptime) >= 300]
                 
                 onlineplayers = await corkus.network.online_players()
                 serverlist = onlineplayers.servers
