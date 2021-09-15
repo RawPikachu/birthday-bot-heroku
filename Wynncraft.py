@@ -118,7 +118,7 @@ class Wynncraft(commands.Cog):
                     if not (servername in db_server_name_list):
                         for server in serverlist:
                             if server.name == servername:                           
-                                db.create_server_list(servername, server.total_players, int(time.time()))
+                                db.create_server_list(servername, server.total_players, int(time.time()), min30_chest_count=None, chest_count=None, last_chest_count=None)
                 
                 db_server_list = db.get_server_list_all()
 
