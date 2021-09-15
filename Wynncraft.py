@@ -8,6 +8,7 @@ import asyncio
 import time
 from db import db_adapter as db
 from corkus import Corkus
+from tabulate import tabulate
 
 
 class Wynncraft(commands.Cog):
@@ -32,10 +33,11 @@ class Wynncraft(commands.Cog):
     
     @commands.command(name='listservers')
     async def _listservers(self, ctx):
-        serverlist = db.get_server_list_all()
-        for server in serverlist:
-            await ctx.send(f"{server.name} {server.total_players} {server.uptime}")
-            await asyncio.sleep(.25)
+        db_server_list = db.get_server_list_all()
+        table = [[db_server.name, db_server.total_players, db_server.uptime, db_server.min30_chest_count] for db_server in db_server_list]
+        table.insert(0, ["Server", "Player Count", "Uptime (min)", "Chest Count (30 mins)"])
+        tabulated_table = tabulate(table)
+        await ctx.send(f"```prolog\n{tabulated_table}\n```")
 
     @commands.command(name='findlootingworld', brief="Finds the total number of chests opened in the given wynncraft world.", description="Finds the total number of chests opened in the given wynncraft world. (Enter the world in number form)")
     async def wynncraft_findlootingworld(self, ctx, world: int):
@@ -131,5 +133,33 @@ class Wynncraft(commands.Cog):
                     db.update_server_list(db_server.name, db_server.total_players, db_server.timestamp, uptime=db_server.uptime)
 
                 await asyncio.sleep(30)
-            
-            
+    
+    async def chest_count_check(self):
+        async with Corkus() as corkus:
+            while True:
+                db_server_list = db.get_server_list_all()
+
+                db_server_list_5_plus = [db_server.name for db_server in db_server_list if db_server.uptime >= 300]
+                
+                onlineplayers = await corkus.network.online_players()
+                serverlist = onlineplayers.servers
+                
+                chosen_server_list = [server for server in serverlist if server.name in db_server_list_5_plus]
+
+                players_chests_found = {}
+
+                for chosen_server in chosen_server_list:
+                    partial_players = chosen_server.players
+                    for partial_player in partial_players:
+                        player = await partial_player.fetch()
+                        player_chests_found = player.statistics.chests_found
+                        players_chests_found[player.username] = player_chests_found
+
+                    server_total_chests_found = sum(players_chests_found.values())
+                    db_server = [db_server for db_server in db_server_list if db_server.name == chosen_server.name][0]
+                    db_server.calculate_30mins_chest_count(server_total_chests_found)
+                    db.update_server_list(db_server.name, db_server.total_players, db_server.timestamp, min30_chest_count=db_server.min30_chest_count, chest_count=db_server.chest_count, last_chest_count=db_server.last_chest_count)
+
+                await asyncio.sleep(1800)
+
+
