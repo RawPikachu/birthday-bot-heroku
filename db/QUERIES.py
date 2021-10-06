@@ -18,7 +18,7 @@ delete_server_list_table = '''drop table if exists server_list'''
 
 create_server_list = '''insert into server_list (name, total_players, timestamp, min30_chest_count, chest_count, last_chest_count ) values (%s, %s, %s, %s, %s, %s)'''
 
-update_server_list = '''update server_list set total_players = %s, timestamp = %s, uptime = %s, min30_chest_count = %s, chest_count = %s, last_chest_count = %s where name = %s'''
+update_server_list = '''insert into server_list (name, total_players, timestamp, min30_chest_count, chest_count, last_chest_count) values (%s, %s, %s, %s, %s, %s) on conflict (name) do update set total_players = excluded.total_players, timestamp = excluded.timestamp, uptime = excluded.uptime, min30_chest_count = excluded.min30_chest_count, chest_count = excluded.chest_count, last_chest_count = excluded.last_chest_count'''
 
 delete_server_list = '''delete from server_list where name=%s'''
 

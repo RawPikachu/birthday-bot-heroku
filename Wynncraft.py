@@ -9,6 +9,7 @@ import time
 from db import db_adapter as db
 from corkus import Corkus
 from tabulate import tabulate
+import requests
 import json
 
 
@@ -101,40 +102,28 @@ class Wynncraft(commands.Cog):
             await ctx.send(f"{ctx.author.mention} {total_chests_opened} chests have been opened in the past 10 minutes.")
     
     async def server_check(self):
-        async with Corkus() as corkus:
-            while True:
-                onlineplayers = await corkus.network.online_players()
-                serverlist = onlineplayers.servers
-                
-                db_server_list = db.get_server_list_all()
+        while True:
+            db_server_list = db.get_server_list_all()
+            
+            response = requests.get("https://athena.wynntils.com/cache/get/serverList")
 
-                servernamelist = [server.name for server in serverlist]
+            serverlist = response.text["servers"]
 
-                db_server_name_list = [db_server.name for db_server in db_server_list]
+            db_server_names = [db_server.name for db_server in db_server_list]
 
-                for db_server_name in db_server_name_list:
-                    if not (db_server_name in servernamelist):
-                        db.delete_server_list(db_server_name)
-                
-                for servername in servernamelist:
-                    if not (servername in db_server_name_list):
-                        for server in serverlist:
-                            if server.name == servername:                           
-                                db.create_server_list(servername, server.total_players, int(time.time()), min30_chest_count=None, chest_count=None, last_chest_count=None)
-                
-                db_server_list = db.get_server_list_all()
+            for server in serverlist:
+                if not (server in db_server_names):
+                    db.create_server_list(server, len(serverlist[server]["players"]), serverlist[server]["firstSeen"] / 1000)
+            for db_server in db_server_list:
+                if not (db_server in serverlist):
+                    db.delete_server_list(db_server.name)
+                db_server.calculate_uptime()
+                for server in serverlist:
+                    if server == db_server.name:
+                        db_server.total_players = len(serverlist[server]["players"])
+                        db.update_server_list(server, db_server.total_players, serverlist[server]["firstSeen"] / 1000, uptime=db_server.uptime, min30_chest_count=db_server.min30_chest_count, chest_count=json.dumps(db_server.chest_count), last_chest_count=json.dumps(db_server.last_chest_count))
 
-                onlineplayers = await corkus.network.online_players()
-                serverlist = onlineplayers.servers
-                
-                for db_server in db_server_list:
-                    db_server.calculate_uptime()
-                    for server in serverlist:
-                        if server.name == db_server.name:
-                            db_server.total_players = server.total_players
-                    db.update_server_list(db_server.name, db_server.total_players, db_server.timestamp, uptime=db_server.uptime, min30_chest_count=db_server.min30_chest_count, chest_count=json.dumps(db_server.chest_count), last_chest_count=json.dumps(db_server.last_chest_count))
-
-                await asyncio.sleep(30)
+            await asyncio.sleep(30)
     
     async def chest_count_check(self):
         async with Corkus() as corkus:

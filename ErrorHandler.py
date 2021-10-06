@@ -2,7 +2,7 @@ import discord
 import traceback
 import sys
 from discord.ext import commands
-from urllib.error import HTTPError
+from requests.exceptions import HTTPError
 
 
 class CommandErrorHandler(commands.Cog):

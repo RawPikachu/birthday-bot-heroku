@@ -140,7 +140,7 @@ def get_server_list_one(name):
 def update_server_list(name, total_players, timestamp, uptime="", min30_chest_count=None, chest_count=None, last_chest_count=None):
     conn = __create_connection()
     cursor = conn.cursor()
-    cursor.execute(queries.update_server_list, (total_players, timestamp, uptime, min30_chest_count, chest_count, last_chest_count, name))
+    cursor.execute(queries.update_server_list, (name, total_players, timestamp, uptime, min30_chest_count, chest_count, last_chest_count))
     conn.commit()
     cursor.close()
     conn.close()
