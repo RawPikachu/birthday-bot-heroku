@@ -32,6 +32,7 @@ class General(commands.Cog, commands.MinimalHelpCommand):
     @commands.is_owner()
     async def _eval(self, ctx, *, command):
         env = {
+            'discord': discord,
             'bot': self.bot,
             'ctx': ctx,
             'message': ctx,
