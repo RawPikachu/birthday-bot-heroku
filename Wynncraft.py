@@ -1,8 +1,4 @@
 from discord.ext import commands
-#from discord_slash import cog_ext
-#from discord_slash.context import SlashContext
-#from discord_slash.model import SlashCommandOptionType
-#from discord_slash.utils.manage_commands import create_option
 from collections import Counter
 import asyncio
 import time
@@ -18,18 +14,7 @@ class Wynncraft(commands.Cog):
         self.bot = bot
         self.bot.loop.create_task(self.server_check())
         self.bot.loop.create_task(self.chest_count_check())
-    """
-    @cog_ext.cog_slash(name="findlootingworld", 
-                            description="Finds the least looted wynncraft world.",
-                            options=[
-                                create_option(
-                                    name="world",
-                                    description="The Wynncraft world that you want to check. (Only the number part.)",
-                                    option_type=SlashCommandOptionType.INTEGER,
-                                    required=True
-                                )
-                            ])
-    """
+        
     async def limited(self, until):
         duration = int(round(until - time.time()))
         print('Rate limited, sleeping for {:d} seconds'.format(duration))

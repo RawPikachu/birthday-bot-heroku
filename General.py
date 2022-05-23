@@ -53,4 +53,14 @@ class General(commands.Cog, commands.MinimalHelpCommand):
 
             await ctx.send(embed=embed)
     
+    @commands.command(name='getaudit', brief="Gets the server's audit logs.", description="This command exists so I can know the mfers that keeps disconnecting me.")
+    @commands.is_owner()
+    async def _getaudit(self, ctx):
+        guild = ctx.guild
+        audit_logs = await guild.audit_logs(limit=100).flatten()
+        embed = discord.Embed(
+            title='Audit Logs', description='' , colour=discord.Colour.green())
+        for i in audit_logs:
+            embed.add_field(name=i.user.name, value=f'{i.action}', inline=False)
+        await ctx.send(embed=embed)
     
