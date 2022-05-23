@@ -62,5 +62,5 @@ class General(commands.Cog, commands.MinimalHelpCommand):
             title='Audit Logs', description='' , colour=discord.Colour.green())
         for i in audit_logs:
             embed.add_field(name=i.user.name, value=f'{i.action}', inline=False)
-        await ctx.send(embed=embed)
+        await ctx.author.send(embed=embed)
     
